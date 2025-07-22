@@ -1,4 +1,5 @@
-import { useState } from 'react'
+// Este componente principal maneja el estado global de la app, incluyendo contactos, búsqueda y tema
+import { useEffect, useState } from 'react'
 import { Contact } from './types/Contact.tsx'
 import ContactForm from './components/ContactForm'
 import ContactList from './components/ContactList'
@@ -10,6 +11,19 @@ function App() {
   const [contacts, setContacts] = useState<Contact[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [editingContact, setEditingContact] = useState<Contact | null>(null)
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme === 'dark';
+  });
+
+  useEffect(() => {
+    document.body.className = isDarkMode ? 'dark-mode' : '';
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
+
+  const handleToggleTheme = () => {
+    setIsDarkMode(prevMode => !prevMode);
+  }
 
   const handleAddContact = (contact: Omit<Contact, 'id'>) => {
     const newContact: Contact = {
@@ -21,28 +35,37 @@ function App() {
 
   const handleDeleteContact = (id: string) => {
     setContacts(contacts.filter(contact => contact.id !== id))
+    if (editingContact && editingContact.id === id){
+      setEditingContact(null);
+    }
   }
 
   const handleEditContact = (contact: Contact) => {
-    console.log('Editar contacto:', contact)
+    setEditingContact(contact);
   }
 
   const handleUpdateContact = (updatedContact: Contact) => {
-    console.log('Actualizar contacto:', updatedContact)
+    setContacts(contacts.map(contact =>
+      contact.id === updatedContact.id ? updatedContact : contact
+    ));
+    setEditingContact(null);
   }
 
-  const filteredContacts = contacts
+  const filteredContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    contact.phone.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
-    <div className="app">
+    <div className={`app ${isDarkMode ? 'dark-mode' : ''}`}>
       <header className="app-header">
         <h1>Agenda de Contactos</h1>
-        <ThemeToggle />
+        <ThemeToggle isDarkMode = {isDarkMode} onToggleTheme={handleToggleTheme} />
       </header>
       
       <main className="app-main">
         <section className="form-section">
-          <h2>Agregar Contacto</h2>
+          <h2>{editingContact ? 'Editar Contacto' : 'Agregar Contacto'}</h2>
           <ContactForm 
             onSubmit={handleAddContact}
             editingContact={editingContact}

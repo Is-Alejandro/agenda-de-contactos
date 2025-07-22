@@ -1,7 +1,11 @@
+/* Aquí están los estilos de la aplicación incluyendo soporte para tema claro y oscuro */
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;;
 }
 
 .app-header {

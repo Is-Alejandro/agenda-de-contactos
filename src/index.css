@@ -1,12 +1,46 @@
+/* Aquí se definen los estilos base y las variables para el tema claro y oscuro */
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --background-color: #f5f5f5;
+  --text-color: #333;
+  --header-background: #f0f0f0;
+  --header-shadow: rgba(0,0,0,0.1);
+  --card-background: white;
+  --card-shadow: rgba(0,0,0,0.1);
+  --border-color: #ddd;
+  --button-primary-background: #66bb6a;
+  --button-primary-hover: #5cb85c;
+  --button-danger-background: #ef5350;
+  --button-danger-hover: #e53935;
+  --button-info-background: #42a5f5;
+  --button-info-hover: #3b9cdc;
+  --toggle-background: #999;
+  --toggle-hover: #aaa;
+  --empty-message-color: #bbb;
+  --list-border-color: #555;
+}
+
+body.dark-mode {
+  --background-color: #282c34;
+  --text-color: #e0e0e0;
+  --header-background: #3a3f47;
+  --header-shadow: rgba(0,0,0,0.4);
+  --card-background: #3a3f47;
+  --card-shadow: rgba(0,0,0,0.4);
+  --border-color: #555;
+  --button-primary-background: #66bb6a;
+  --button-primary-hover: #5cb860;
+  --button-danger-background: #ef5350;
+  --button-danger-hover: #e53935;
+  --button-info-background: #42a5f5;
+  --button-info-hover: #3b9cdc;
+  --toggle-background: #999;
+  --toggle-hover: #aaa;
+  --empty-message-color: #bbb;
+  --list-border-color: #555;
 }
 
 * {
@@ -19,8 +53,9 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #f5f5f5;
-  color: #333;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 #root {
