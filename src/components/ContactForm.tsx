@@ -1,4 +1,5 @@
-import { useState } from 'react'
+// Este componente maneja el formulario para agregar y editar contactos
+import { useEffect, useState } from 'react'
 import { Contact } from '../types/Contact.tsx'
 
 interface ContactFormProps {
@@ -12,6 +13,16 @@ function ContactForm({ onSubmit, editingContact, onUpdate, onCancelEdit }: Conta
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
 
+  useEffect(() => {
+    if(editingContact){
+      setName(editingContact.name);
+      setPhone(editingContact.phone);
+    } else {
+      setName('');
+      setPhone('');
+    }
+  }, [editingContact]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     
@@ -19,8 +30,12 @@ function ContactForm({ onSubmit, editingContact, onUpdate, onCancelEdit }: Conta
       alert('Por favor complete todos los campos')
       return
     }
-
-    onSubmit({ name: name.trim(), phone: phone.trim() })
+    
+    if(editingContact){
+      onUpdate({...editingContact, name: name.trim(), phone: phone.trim()});
+    } else {
+      onSubmit({name: name.trim(), phone: phone.trim()});
+    }
     setName('')
     setPhone('')
   }
@@ -51,7 +66,7 @@ function ContactForm({ onSubmit, editingContact, onUpdate, onCancelEdit }: Conta
       
       <div className="form-actions">
         <button type="submit">
-          Agregar
+          {editingContact ? 'Actualizar' : 'Agregar'}
         </button>
         {editingContact && (
           <button type="button" onClick={onCancelEdit}>
